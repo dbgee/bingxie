@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.web.*?>
+
+<GridPane alignment="CENTER" hgap="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" vgap="10.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.rebeyond.behinder.ui.controller.UpdateInfoViewController">
+
+    <children>
+      <HBox alignment="BOTTOM_CENTER" layoutY="50.0" prefWidth="800.0" spacing="10.0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM">
+         <children>
+            <Label text="地址" />
+            <TextField fx:id="address" prefWidth="600" />
+            <Button fx:id="browerIntranet" mnemonicParsing="false" onAction="#loadWebPage" text="Let's Go" />
+         </children>
+      </HBox>
+        <HBox spacing="20.0" GridPane.columnSpan="2" GridPane.rowIndex="1">
+            <TextArea fx:id="showRequestHeader" maxHeight="100" minHeight="-Infinity" minWidth="200" />
+            <TextArea fx:id="showResponseHeader" maxHeight="100" minHeight="-Infinity" minWidth="200" />
+        </HBox>
+        <WebView fx:id="updateInfoWebview"  prefHeight="480.0" prefWidth="-1.0" GridPane.columnSpan="2" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
+
+    </children>
+   <columnConstraints>
+      <ColumnConstraints />
+      <ColumnConstraints />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+   </rowConstraints>
+   <padding>
+      <Insets left="5.0" right="5.0" top="5.0" />
+   </padding>
+</GridPane>
