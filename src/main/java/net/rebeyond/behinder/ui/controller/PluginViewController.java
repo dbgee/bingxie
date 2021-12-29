@@ -6,6 +6,7 @@ import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.List;
 
 import javafx.application.Platform;
@@ -17,6 +18,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
@@ -225,23 +227,71 @@ public class PluginViewController {
         Tooltip tip = new Tooltip();
         tip.setText(pluginCommnet);
         Tooltip.install(box, tip);
-        box.setOnMouseClicked((e) -> {
-            try {
-                this.statusLabel.setText("[!]选中插件:"+pluginName);
-                this.pluginWebView.getEngine().load(entryFilePath);
-                logger.info("plugin：{} 开始执行,entryFilePath:{}",pluginName,entryFilePath);
+        Platform.runLater(()->{
+            box.setOnMouseClicked((e) -> {
+                Platform.runLater(()->{
+                    this.statusLabel.setText("[!]选中插件:"+pluginName);
+                });
 
-                this.pluginDetailGridPane.setOpacity(1.0D);
-                this.loadPluginDetail(pluginObj);
+                if(e.getButton()== MouseButton.PRIMARY){
+                    try {
+                        this.pluginWebView.getEngine().load(entryFilePath);
+                        logger.info("plugin：{} 开始执行,entryFilePath:{}",pluginName,entryFilePath);
 
-                String tempParam="{\n" +
-                        "    \"name\":\"scan_host\",\n" +
-                        "    \"version\":\"v2.2.1\"\n" +
-                        "}";
-                this.pluginTools.sendTask(pluginName,tempParam);
-            } catch (Exception var5) {
-            }
+                        this.pluginDetailGridPane.setOpacity(1.0D);
+                        this.loadPluginDetail(pluginObj);
 
+                        String tempParam="{\n" +
+                                "    \"name\":\"scan_host\",\n" +
+                                "    \"version\":\"v2.2.1\"\n" +
+                                "}";
+                        this.pluginTools.sendTask(pluginName,tempParam);
+                    } catch (Exception var5) {
+                    }
+                }else if(e.getButton()==MouseButton.SECONDARY){
+                    ContextMenu contextMenu=new ContextMenu();
+                    MenuItem updatePlugin=new MenuItem("更新插件");
+                    MenuItem unloadPlugin=new MenuItem("卸载插件");
+
+                    unloadPlugin.setOnAction((event)->{
+                        try {
+                            this.pluginWebView.getEngine().loadContent("插件卸载中");
+                            pluginIcon.setImage(null);
+
+                            String pluginPath=Utils.getSelfPath()+File.separator+"Plugins"+File.separator+pluginName;
+                            if(!Utils.deleteFileForce(pluginPath)){
+                                logger.error("插件目录删除失败,轻稍后重试。");
+                                this.pluginWebView.getEngine().loadContent(String.format("%s 卸载失败,请稍后重试。",pluginName));
+                                return;
+                            }else {
+                                boolean delFlag=this.shellManager.delPlugin(pluginName);
+                                if (delFlag){
+                                    box.getChildren().removeAll(pluginIcon,pluginLabel);
+                                    this.pluginWebView.getEngine().loadContent(String.format("%s 卸载成功",pluginName));
+                                    logger.debug("插件已卸载:{}",pluginName);
+
+                                    box.getChildren().removeAll(pluginIcon,pluginLabel);
+
+                                }
+                            }
+
+                        } catch (Exception exception) {
+                            exception.printStackTrace();
+                        }
+                    });
+
+                    updatePlugin.setOnAction((event)->{
+                        Utils.showInfoMessage("操作提示","目前近支持本地安装，请先卸载，再重装即可。");
+                    });
+
+                    contextMenu.getItems().addAll(updatePlugin,unloadPlugin);
+                    box.setOnContextMenuRequested((contextEvent)->{
+                        contextMenu.show(pluginIcon,e.getScreenX(),e.getScreenY());
+                        contextMenu.show(pluginLabel,e.getScreenX(),e.getScreenY());
+                    });
+
+                }
+            });
         });
         box.setOnMouseEntered((e) -> {
             VBox v = (VBox)e.getSource();

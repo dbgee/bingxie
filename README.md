@@ -1,5 +1,5 @@
 # 冰蝎
-开源版 冰蝎 v4.0
+开源版 冰蝎 v4.1
 
 ## 简介
 一款平台通用shell 管理工具
@@ -10,11 +10,11 @@
 
 1. 下载已经编译好的jar 文件 [bingxie-v4.0](https://github.com/dbgee/bingxie/releases/tag/v4.0)
 ，直接运行  
-` java -jar bingxie-v4.0.jar `
+` java -jar bingxie-v4.1.jar `
 2. 下载源码,本地编译运行
     1. 下载代码到本地 `git clone https://github.com/dbgee/bingxie && cd bingxie `
     2. 编译打包 `mvn -DskipTests package`
-    3. 运行 ` java -jar bingxie-v4.0-jar-with-dependencies.jar `
+    3. 运行 ` java -jar bingxie-v4.1-jar-with-dependencies.jar `
 
 ## 变更日志
 1. 新增“内容漫步” 功能
@@ -22,11 +22,13 @@
 3. 优化启动入口，方便组件安装
 4. 新增日志输出，方便排错调试
 5. 新增插件功能 [目前demo 展示中](https://github.com/dbgee/bingxie/wiki#%E6%8F%92%E4%BB%B6%E5%8A%9F%E8%83%BD%E4%BD%BF%E7%94%A8) 
+    1. 优化插件功能
 
 ## TODO
-- 优化内网漫步功能
+- 优化`内网漫步`功能
 - 增加混淆模块
 - 完善插件功能，增加实际功能（也欢迎各位提交插件）
+- 增加 `生成服务端` 模块
 
 ## 代码贡献
 1. Fork 本项目到自己的github 账号下

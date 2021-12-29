@@ -1,6 +1,8 @@
 package net.rebeyond.behinder.ui;
 
 
+import net.rebeyond.behinder.utils.Utils;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -146,6 +148,8 @@ public class Test {
 
     public static void main(String[] args) {
         String message = doPost("https://cn.bing.com", "");
-        System.out.println(message);
+
+        String filePath="C:\\Users\\wangz\\Documents\\0_bingxie\\test1" ;
+        Utils.deleteFile(filePath);
     }
 }

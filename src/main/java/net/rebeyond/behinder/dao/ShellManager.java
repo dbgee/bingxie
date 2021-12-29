@@ -6,13 +6,7 @@ import java.io.File;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.Statement;
-import java.sql.Timestamp;
+import java.sql.*;
 
 import net.rebeyond.behinder.utils.Utils;
 import org.json.JSONArray;
@@ -458,6 +452,14 @@ public class ShellManager {
         return num;
     }
 
+    public boolean delPlugin(String pluginName) throws SQLException {
+        PreparedStatement preparedStatement=this.connection.prepareStatement("delete from plugins where name=?");
+        preparedStatement.setString(1,pluginName);
+        int result=preparedStatement.executeUpdate();
+        preparedStatement.close();
+        return result > 0;
+    }
+
     public int delHost(int hostID) throws Exception {
         PreparedStatement statement = this.connection.prepareStatement("delete from hosts where id=?");
         statement.setInt(1, hostID);
@@ -473,6 +475,8 @@ public class ShellManager {
         statement.close();
         return num;
     }
+
+
 
     public JSONArray listPlugin(String scriptType) throws Exception {
         JSONArray result = new JSONArray();
@@ -513,7 +517,6 @@ public class ShellManager {
 
             result.put(obj);
         }
-
         return result;
     }
 

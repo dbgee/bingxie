@@ -6,7 +6,7 @@
 
     <groupId>groupId</groupId>
     <artifactId>bingxie</artifactId>
-    <version>v4.0</version>
+    <version>v4.1</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -26,7 +26,6 @@
             <version>3.31.1</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.json/json -->
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>

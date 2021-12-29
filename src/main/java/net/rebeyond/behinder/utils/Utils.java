@@ -643,6 +643,66 @@ public class Utils {
         return extIndex >= 0 ? fileName.substring(extIndex + 1).toLowerCase() : "";
     }
 
+    public static boolean deleteFileForce(String filePath){
+        File file=new File(filePath);
+        boolean result=false;
+        String fileType="文件";
+        if(file.exists()){
+            if(!file.isFile()){
+                fileType="目录";
+            }
+
+            String cmd="cmd /c rd /s /q "+filePath;
+            try {
+                Runtime.getRuntime().exec(cmd);
+                Thread.sleep(500);
+                if(file.exists()){
+                    logger.debug("{}删除失败：{}",fileType,filePath);
+                    return false;
+                }else{
+                    logger.debug("{}删除成功：{}",fileType,filePath);
+                    return true;
+                }
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        }else{
+            logger.debug("文件或目录不存在，无法删除：{}",filePath);
+            result=false;
+            return result;
+        }
+        return result;
+    }
+
+    public static boolean deleteFile(String filePath){
+        File file=new File(filePath);
+        String fileType="文件";
+        if(file.exists()){
+            if(!file.isFile()){
+                fileType="目录";
+            }
+            if(file.delete()){
+                logger.debug("{}删除成功：{}",fileType,filePath);
+                return true;
+            }else{
+                for (int i = 0; i < 10; i++) {
+                    System.gc();
+                    try {
+                        Thread.sleep(100);
+                        file.delete();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                logger.debug("{}删除失败：{}",fileType,filePath);
+                return false;
+            }
+        }else{
+            logger.debug("文件或目录不存在，无法删除：{}",filePath);
+            return false;
+        }
+    }
+
     public static byte[] getData(String key, int encryptType, String className, Map<String, String> params, String type, byte[] extraData) throws Exception {
         byte[] bincls;
         byte[] encrypedBincls;
@@ -783,7 +843,7 @@ public class Utils {
     }
 
     public static JSONObject parsePluginZip(String zipFilePath) throws Exception {
-        logger.info("正在加载插件:{}",zipFilePath);
+        logger.debug("加载插件:{}",zipFilePath);
         String pluginRootPath = getSelfPath() + "/Plugins";
         String pluginName = "";
         ZipFile zf = new ZipFile(zipFilePath);
@@ -820,6 +880,11 @@ public class Utils {
         pluginEntity.put("link", pluginConfig.getProperty("link"));
         pluginEntity.put("qrcode", pluginConfig.getProperty("qrcode"));
         pluginEntity.put("comment", pluginConfig.getProperty("comment"));
+
+//        修复插件不能删除bug，未正确关闭文件流
+        in.close();
+        zin.close();
+        fis.close();
         return pluginEntity;
     }
 
