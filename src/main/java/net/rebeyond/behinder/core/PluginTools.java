@@ -51,7 +51,7 @@ public class PluginTools {
         JSONObject paramObj = new JSONObject(paramStr);
         Map<String, String> params = Utils.jsonToMap(paramObj);
         params.put("taskID", pluginName);
-        logger.info("taskID:{}",pluginName);
+        logger.debug("taskID:{}",pluginName);
         this.statusLabel.setText("正在执行插件……");
         String finalPayloadPath = payloadPath;
         Runnable runner = () -> {

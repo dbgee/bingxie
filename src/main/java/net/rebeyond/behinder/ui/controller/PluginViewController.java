@@ -271,7 +271,6 @@ public class PluginViewController {
                                     logger.debug("插件已卸载:{}",pluginName);
 
                                     box.getChildren().removeAll(pluginIcon,pluginLabel);
-
                                 }
                             }
 
@@ -322,6 +321,7 @@ public class PluginViewController {
                 this.addPluginBox(pluginEntity);
                 this.shellManager.addPlugin(pluginEntity.getString("name"), pluginEntity.getString("version"), pluginEntity.getString("entryFile"), pluginEntity.getString("scriptType"), pluginEntity.getString("type"), pluginEntity.getInt("isGetShell"), pluginEntity.getString("icon"), pluginEntity.getString("author"), pluginEntity.getString("link"), pluginEntity.getString("qrcode"), pluginEntity.getString("comment"));
                 this.statusLabel.setText("插件安装成功。");
+                this.pluginWebView.getEngine().loadContent(String.format("%s 安装成功",pluginEntity.getString("name")));
             } catch (Exception var5) {
                 var5.printStackTrace();
                 this.statusLabel.setText("插件安装失败:" + var5.getMessage());
