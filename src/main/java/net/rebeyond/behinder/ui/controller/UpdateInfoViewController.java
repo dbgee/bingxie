@@ -123,13 +123,12 @@ public class UpdateInfoViewController {
     private void checkUpdate() {
         Runnable runner = () -> {
             try {
-                String updateInfoText = Utils.sendGetRequest(Constants.UPDATE_URL, "");
+                String updateInfoText = Utils.sendGetRequest(Constants.UPDATE_URL, "",5000);
                 JSONObject updateInfoObj = new JSONObject(updateInfoText);
                 String latestVersion=updateInfoObj.getString("version");
                 logger.info("version="+latestVersion);
                 if (Utils.compareVersion(Constants.VERSION,latestVersion)) {
                     Platform.runLater(() -> {
-                        this.statusLabel.setText("发现新版本😊：" + latestVersion + "， 前往下载");
                         this.statusLabel.setOnMouseClicked((event) -> {
                             if (this.statusLabel.getText().startsWith("发现新版本")) {
                                 try {
@@ -141,6 +140,8 @@ public class UpdateInfoViewController {
 
                         });
                     });
+                }else {
+                    Utils.showInfoMessage("通知信息","当前版本为："+Constants.VERSION+"\n 恭喜，已经最新，无需升级。");
                 }
 
             } catch (Exception var4) {

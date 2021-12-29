@@ -106,8 +106,6 @@ public class Utils {
     public static boolean compareVersion(String currentVersion,String latestVersion){
         float currentVer=Float.parseFloat(currentVersion.substring(1,4));
         float targetVer=Float.parseFloat(latestVersion.substring(1,4));
-        logger.info("currentVersion:"+currentVer);
-        logger.info("latestVersion:"+targetVer);
         if(currentVer<targetVer){
             return true;
         }else{

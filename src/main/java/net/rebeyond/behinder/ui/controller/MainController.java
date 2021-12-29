@@ -435,15 +435,13 @@ public class MainController {
         this.checkUpdateInfo.setOnMouseClicked(event -> {
             Runnable runnable=()->{
                 Platform.runLater(()->{
-                    this.statusLabel.setText("[!]正在检查更新，请稍后……");
                     try {
-
-                        String updateInfoText = null;
-                        updateInfoText = Utils.sendGetRequest(Constants.UPDATE_URL, "",3000);
+                        String updateInfoText;
+                        updateInfoText = Utils.sendGetRequest(Constants.UPDATE_URL, "",5000);
                         JSONObject updateInfoObj = new JSONObject(updateInfoText);
                         String latestVersion=updateInfoObj.getString("version");
-                        logger.info("version="+latestVersion);
                         if (Utils.compareVersion(Constants.VERSION,latestVersion)) {
+                            this.statusLabel.setText("发现新版本😊：" + latestVersion);
                             Alert alert = new Alert(AlertType.CONFIRMATION);
                             alert.setResizable(true);
                             alert.setTitle("发现新版本!!!");
@@ -452,29 +450,41 @@ public class MainController {
 
                             Optional<ButtonType> result = alert.showAndWait();
                             if (result.get() == ButtonType.OK) {
-                                Utils.openWebpage(new URI(Constants.UPDATE_URL));
+                                Utils.openWebpage(new URI(Constants.DOWNLOAD_URL));
                             }
 
+                        }else{
+                            Utils.showInfoMessage("通知信息","当前版本为："+Constants.VERSION+"\n最新版本为："+latestVersion+"\n\n 恭喜，已经最新，无需升级。");
                         }
                     } catch (Exception e) {
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
-                                Alert temp = new Alert(AlertType.INFORMATION);
+                                logger.error("检查更新失败:{}",e.toString());
+                                MainController.this.statusLabel.setText("[-]检查更新失败。");
+
+                                Alert temp = new Alert(AlertType.CONFIRMATION);
                                 temp.setResizable(true);
                                 temp.setTitle("检查更新结果");
                                 temp.setHeaderText("检查更新失败");
-                                temp.setContentText("检查更新失败，请检查网络设置，确定可以访问Github 官网。");
-                                temp.showAndWait();
+                                temp.setContentText("检查更新失败，请检查网络设置，确定可以访问Github 官网。\n\n 是否前往官网，手动下载？");
+
+                                Optional<ButtonType> result = temp.showAndWait();
+                                if (result.get() == ButtonType.OK) {
+                                    try {
+                                        Utils.openWebpage(new URI(Constants.DOWNLOAD_URL));
+                                    } catch (URISyntaxException uriSyntaxException) {
+                                        logger.debug("检查更新问题：{}",uriSyntaxException.toString());
+                                    }
+                                }
                             }
                         });
-                        logger.info("检查更新失败:{}",e.toString());
-                        MainController.this.statusLabel.setText("[-]检查更新失败。");
 
                     }
                 });
             };
             Thread workThread=new Thread(runnable);
+
             workThread.start();
 
         });
