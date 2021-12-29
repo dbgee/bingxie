@@ -1,5 +1,5 @@
 # 冰蝎
-开源版 冰蝎 v4.1
+开源版 冰蝎 v4.1  
 
 ## 简介
 一款平台通用shell 管理工具
@@ -8,7 +8,7 @@
 > 两种运行方式  
 > 运行环境要求：jre1.8+ 
 
-1. 下载已经编译好的jar 文件 [bingxie-v4.0](https://github.com/dbgee/bingxie/releases/tag/v4.0)
+1. 下载已经编译好的jar 文件 [bingxie-v4.1](https://github.com/dbgee/bingxie/releases/tag/v4.1)
 ，直接运行  
 ` java -jar bingxie-v4.1.jar `
 2. 下载源码,本地编译运行
