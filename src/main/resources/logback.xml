@@ -2,8 +2,11 @@
 <configuration>
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <!--withJansi 参数改为true-->
+        <withJansi>true</withJansi>
         <encoder>
             <pattern>%red([%d{HH:mm:ss}]) %highlight(%-5level)  %logger{36}\(%file:%line\) - %msg%n</pattern>
+            <charset>UTF-8</charset>
         </encoder>
     </appender>
 

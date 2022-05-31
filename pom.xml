@@ -74,6 +74,14 @@
             <artifactId>logback-classic</artifactId>
             <version>1.2.11</version>
         </dependency>
+
+<!--        版本不能太高，否则windows 上颜色不显示，配合logback 中的withJansi 属性使用-->
+<!--        开发过程中控制台运行错误可以忽略，打包之后错误会自动消除-->
+        <dependency>
+            <groupId>org.fusesource.jansi</groupId>
+            <artifactId>jansi</artifactId>
+            <version>1.17.1</version>
+        </dependency>
     </dependencies>
 
     <build>
