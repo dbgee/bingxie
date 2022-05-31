@@ -149,7 +149,7 @@ public class Test {
     public static void main(String[] args) {
         String message = doPost("https://cn.bing.com", "");
 
-        String filePath="C:\\Users\\wangz\\Documents\\0_bingxie\\test1" ;
+        String filePath="test1" ;
         Utils.deleteFile(filePath);
     }
 }
